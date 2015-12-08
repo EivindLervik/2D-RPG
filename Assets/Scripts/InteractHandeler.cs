@@ -14,10 +14,12 @@ public class InteractHandeler : MonoBehaviour {
     private Vector3 targetPos;
 
     private TriggerScript tempTS;
+	private PlayerMoveScript moveScript;
     private string messageToDisplay;
 
 	// Use this for initialization
 	void Start () {
+		moveScript = GetComponent<PlayerMoveScript>();
         originalPos = kamera.transform.localPosition;
         targetPos = originalPos;
 	}
@@ -29,7 +31,6 @@ public class InteractHandeler : MonoBehaviour {
 
     void OnTriggerEnter(Collider collider)
     {
-        print("Traff");
         tempTS = collider.transform.gameObject.GetComponent<TriggerScript>();
         if (tempTS.isInteractable())
         {
@@ -46,6 +47,15 @@ public class InteractHandeler : MonoBehaviour {
                 case TriggerType.CameraPositionerRight:
                     targetPos = cR;
                     break;
+				case TriggerType.Rotator:
+					Vector3 nyRot = transform.eulerAngles;
+					Vector3 appRot = tempTS.getRotation();
+					nyRot += appRot;
+					kamera.transform.SetParent(null);
+					transform.eulerAngles = nyRot;
+					moveScript.TurnVelocity(appRot);
+					kamera.transform.SetParent(transform);
+					break;
             }
         }
     }

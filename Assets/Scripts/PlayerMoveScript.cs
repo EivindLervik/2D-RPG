@@ -86,4 +86,14 @@ public class PlayerMoveScript : MonoBehaviour {
 
         playerModel.transform.eulerAngles = vinkel;
     }
+
+	public void TurnVelocity(Vector3 newDir){
+		Vector3 vel = body.velocity;
+		float mag = body.velocity.magnitude;
+
+		Vector3 newForward = Quaternion.Euler(newDir) * vel.normalized;
+
+		body.velocity = new Vector3();
+		body.velocity = newForward*mag;
+	}
 }
