@@ -96,4 +96,14 @@ public class PlayerMoveScript : MonoBehaviour {
 		body.velocity = new Vector3();
 		body.velocity = newForward*mag;
 	}
+
+	public bool IsAlligned(){
+		return transform.right == Vector3.right;
+	}
+
+	public void AllignPlayer(){
+		float mag = body.velocity.magnitude;
+		body.velocity = new Vector3();
+		body.velocity = transform.right*mag;
+	}
 }

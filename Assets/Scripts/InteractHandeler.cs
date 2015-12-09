@@ -16,9 +16,11 @@ public class InteractHandeler : MonoBehaviour {
     private TriggerScript tempTS;
 	private PlayerMoveScript moveScript;
     private string messageToDisplay;
+	private int rotatorStack;
 
 	// Use this for initialization
 	void Start () {
+		rotatorStack = 0;
 		moveScript = GetComponent<PlayerMoveScript>();
         originalPos = kamera.transform.localPosition;
         targetPos = originalPos;
@@ -27,6 +29,16 @@ public class InteractHandeler : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         kamera.transform.localPosition= Vector3.Lerp(kamera.transform.localPosition, targetPos, lerpSpeed);
+
+		if(ErFri()){
+			//print("ErFri");
+			if(!moveScript.IsAlligned()){
+				//print("IsAlligned");
+				//moveScript.AllignPlayer();
+				transform.forward = Vector3.forward;
+				moveScript.TurnVelocity(transform.eulerAngles*(-1));
+			}
+		}
 	}
 
     void OnTriggerEnter(Collider collider)
@@ -48,6 +60,7 @@ public class InteractHandeler : MonoBehaviour {
                     targetPos = cR;
                     break;
 				case TriggerType.Rotator:
+					rotatorStack++;
 					Vector3 nyRot = transform.eulerAngles;
 					Vector3 appRot = tempTS.getRotation();
 					nyRot += appRot;
@@ -74,6 +87,9 @@ public class InteractHandeler : MonoBehaviour {
             {
                 targetPos = originalPos;
             }
+			if(type == TriggerType.Rotator){
+				rotatorStack--;
+			}
         }
         tempTS = null;
         messageToDisplay = "";
@@ -94,4 +110,8 @@ public class InteractHandeler : MonoBehaviour {
     {
         handeler.HideInteracter();
     }
+
+	private bool ErFri(){
+		return rotatorStack == 0;
+	}
 }
