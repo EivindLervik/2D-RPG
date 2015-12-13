@@ -18,10 +18,13 @@ public class PlayerMoveScript : MonoBehaviour {
     private bool doublejumping;
 
     private Rigidbody body;
+    private InteractHandeler iH;
+    private Vector3 modelTargetAngle;
 
 	// Use this for initialization
 	void Start () {
         body = GetComponent<Rigidbody>();
+        iH = GetComponent<InteractHandeler>();
 	}
 	
 	// Update is called once per frame
@@ -84,7 +87,9 @@ public class PlayerMoveScript : MonoBehaviour {
             vinkel.y += 360.0f;
         }
 
+        modelTargetAngle = vinkel;
         playerModel.transform.eulerAngles = vinkel;
+        iH.DidTurn();
     }
 
 	public void TurnVelocity(Vector3 newDir){
@@ -101,9 +106,12 @@ public class PlayerMoveScript : MonoBehaviour {
 		return transform.right == Vector3.right;
 	}
 
-	public void AllignPlayer(){
-		float mag = body.velocity.magnitude;
-		body.velocity = new Vector3();
-		body.velocity = transform.right*mag;
-	}
+    public void Face(Vector3 retning)
+    {
+        float mag = body.velocity.magnitude;
+        Vector3 lastDirNorm = body.velocity.normalized;
+        lastDirNorm.y = 0;
+        body.velocity = new Vector3();
+        body.velocity = retning * mag;
+    }
 }

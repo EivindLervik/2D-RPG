@@ -10,15 +10,12 @@ public class TriggerScript : MonoBehaviour {
 
     public TriggerType type;
     public string message;
-	public Vector3 rotation;
 
     private bool interactable;
-	private bool hasRotated;
     //private 
 
 	// Use this for initialization
 	void Start () {
-		hasRotated = false;
         switch (type)
         {
             case TriggerType.Door:
@@ -64,13 +61,4 @@ public class TriggerScript : MonoBehaviour {
     {
         return message;
     }
-
-	public Vector3 getRotation(){
-		Vector3 rot = rotation;
-		if(hasRotated){
-			rot *= -1;
-		}
-		hasRotated = !hasRotated;
-		return rot;
-	}
 }
